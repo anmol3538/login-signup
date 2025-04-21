@@ -18,6 +18,13 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      isverified: {
+        type: Sequelize.BOOLEAN,
+        default: false
+      },
+      verificationcode: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

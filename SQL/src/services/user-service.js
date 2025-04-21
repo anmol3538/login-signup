@@ -54,6 +54,16 @@ class UserService {
         }
     }
 
+    async verify(data) {
+        try {
+            const response = await this.userRepository.verify(data);
+            return response;
+        } catch (error) {
+            console.log('Something wrong at service level');
+            throw error;
+        }
+    }
+
     createtoken(user){
         try{
             const token = jwt.sign(user, JWT_KEY, { expiresIn: '1h'})

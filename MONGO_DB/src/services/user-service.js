@@ -29,6 +29,17 @@ class UserService {
             throw error;
         }
     }
+
+
+    async verify(data) {
+        try {
+            const response = await userrepo.verify(data);
+            return response;
+        } catch (error) {
+            console.log('Something wrong at service level');
+            throw error;
+        }
+    }
 }
 
 module.exports = UserService;

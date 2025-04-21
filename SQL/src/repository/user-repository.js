@@ -6,13 +6,14 @@ const {StatusCodes} = require('http-status-codes');
 class UserRepository {
     async create(data) {
         try{
-            console.log(data);
-            const user1 = await Users.create(data);
+            const verificationcode = Math.floor(100000 + Math.random() * 900000).toString();
+            const data1 = {...data, verificationcode};
+            const user1 = await Users.create(data1);
             await sendEmail(
                 user1.email,
-                'Welcome to Our Website',
-                `Hey! You have successfully created the account. your credentials are email : ${data.email} and pass : ${data.password}`
-              );
+                'Verify Your Email',
+                `Here is your verification code for verifying email: ${verificationcode}`
+            )
             return user1;
         }
         catch (error) {
@@ -59,6 +60,23 @@ class UserRepository {
             console.log('something wrong in repository layer');
             throw error;
         }
+    }
+
+
+    async verify(data){
+            try {
+                const user = await Users.findOne({
+                    verificationcode: data.code
+                })
+                if(!user) throw error;
+                user.isverified = true;
+                user.verificationcode = null;
+                console.log(user);
+                await user.save();
+                return user;
+            } catch (error) {
+                throw error;
+            }
     }
 
 }

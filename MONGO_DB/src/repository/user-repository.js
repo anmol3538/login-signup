@@ -7,11 +7,13 @@ class UserRepository {
 
     async create(data) {
         try {
-            const user1 = await User.create(data);
+            const verificationcode = Math.floor(100000 + Math.random() * 900000).toString();
+            const data1 = {...data, verificationcode};
+            const user1 = await User.create(data1);
             await sendEmail(
                 user1.email,
-                'Welcome to our website',
-                `You have been registered successfully and here are your credentials ${data.email} and password : ${data.password}`
+                'Verify Your Email',
+                `Here is your verification code for verifying email: ${verificationcode}`
             )
             return user1;
         } catch (error) {
@@ -26,6 +28,22 @@ class UserRepository {
             return user1;
         } catch (error) {
             console.log(error);
+            throw error;
+        }
+    }
+
+    async verify(data){
+        try {
+            const user = await User.findOne({
+                verificationcode: data.code
+            })
+            if(!user) throw error;
+            user.isverified = true;
+            user.verificationcode = null;
+            console.log(user);
+            await user.save();
+            return user;
+        } catch (error) {
             throw error;
         }
     }

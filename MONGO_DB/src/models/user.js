@@ -10,7 +10,12 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    isverified: {
+        type: Boolean,
+        default: false
+    },
+    verificationcode: String
 }, {timestamps: true});
 
 const User = mongoose.model('User', userSchema);
